@@ -118,7 +118,7 @@ function dump_bootimage {
         else
             device=`echo $info | cut -d":" -f3`
         fi
-        adb pull $device $TARGET_FILES_DIR/BOOTABLE_IMAGES/boot.img
+        #adb pull $device $TARGET_FILES_DIR/BOOTABLE_IMAGES/boot.img
     fi
 }
 

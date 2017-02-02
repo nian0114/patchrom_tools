@@ -50,7 +50,6 @@ def ProcessSystemFormat(info):
 def FullOTA_InstallEnd(info):
   UnpackData(info.script)
   CopyDataFiles(info.input_zip, info.output_zip, info.script)
-  ProcessSystemFormat(info)
   Replace_Cert(info.input_zip, info.output_zip, info.script)
   RemoveUseslessFiles(info.script)
   SetPermissions(info.script)

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# $1: dir for original miui app 
+# $1: dir for original miui app
 # $2: dir for target miui app
 #
 if [ -f "customize_miui_app.sh" ]; then
@@ -18,6 +18,21 @@ if [ -f $1 ];then
                 mv $file.new $file
             done
         fi
+        if [ -f $1/res/xml/*.xml ]; then
+              cp -rf $1/res/xml/*.xml $2/res/xml/
+        fi
+    fi
+
+    if [ $1 = "FindDevice" ];then
+      sed -i 's/android.uid.finddevice/android.uid.system/g' $2/AndroidManifest.xml
+    fi
+
+    if [ $1 = "CleanMaster" ];then
+       sed -i -e "s/adv\.sec\.miui\.com\/info\/layout/127\.0\.0\.1/g" $2/smali/com/miui/optimizecenter/result/DataModel.smali
+    fi
+
+    if [ $1 = "Weather" ];then
+       sed -i -e "s/adv\.sec\.miui\.com\/info/127\.0\.0\.1/g" $2/smali/com/miui/weather2/spider/Spider.smali
     fi
 
     # patch *.smali.method under $1

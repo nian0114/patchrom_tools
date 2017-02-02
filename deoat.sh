@@ -53,7 +53,7 @@ function decodeBootOat() {
 
 function decodeOdex() {
     local suffix=$1
-    local zipPath  
+    local zipPath
     for zipPath in $(find $TARGET_DIR -name "*.$suffix")
     do
         local zipDir=$(dirname $zipPath)

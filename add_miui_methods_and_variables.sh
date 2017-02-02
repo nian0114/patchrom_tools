@@ -41,7 +41,8 @@ do
                         beginLineNum=$(echo ${methodBeginLines[$i]} | cut -d ':' -f1)
                         endLineNum=$(echo ${methodEndLines[$i]} | cut -d ':' -f1)
                         echo "Add method ${methodBeginLines[$i]##* } into $targetSmaliFile"
-                        sed -n ${beginLineNum},${endLineNum}p $modSmaliFile >> $targetSmaliFile
+                        mkdir -p `dirname $targetSmaliFile`
+                        sed -n ${beginLineNum},${endLineNum}p $modSmaliFile >> $targetSmaliFile.part
                     fi
                 fi
             done
@@ -57,10 +58,12 @@ do
                     beginLineNum=$(echo $beginLine | cut -d ":" -f1)
                     if [ $(($linesCount-$i)) -ne 1 -a "$(echo ${fieldLines[$i+1]} | grep ".end field")" != "" ];then
                         endLineNum=$(echo ${fieldLines[$i+1]} | cut -d ":" -f1)
-                        sed -n ${beginLineNum},${endLineNum}p $modSmaliFile >> $targetSmaliFile
+                        mkdir -p `dirname $targetSmaliFile`
+                        sed -n ${beginLineNum},${endLineNum}p $modSmaliFile >> $targetSmaliFile.part
                         i=$(($i+1))
                     else
-                        sed -n ${beginLineNum}p $modSmaliFile >> $targetSmaliFile
+                        mkdir -p `dirname $targetSmaliFile`
+                        sed -n ${beginLineNum}p $modSmaliFile >> $targetSmaliFile.part
                     fi
                 fi
             done

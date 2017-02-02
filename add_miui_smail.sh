@@ -9,11 +9,49 @@
 BASE_DIR=$1
 MIUI_DIR=$2
 TARGET_DIR=$3
+WORK_DIR=$4
+BUILD_OUT=out
 OVERLAY_DIR=$PORT_ROOT/android/overlay
 OVERLAY_CLASSES=$OVERLAY_DIR/OVERLAY_CLASSES
+ADD_CLASSES=$PORT_ROOT/android/miui-add
+TMP_ADD=$WORK_DIR/out/tmp_overlay
 
-$PORT_ROOT/tools/add_miui_methods_and_variables.sh $BASE_DIR $MIUI_DIR $TARGET_DIR
+#$PORT_ROOT/tools/add_miui_methods_and_variables.sh $BASE_DIR $MIUI_DIR $TARGET_DIR
+function appendSmaliPart() {
+  cp -rf $ADD_CLASSES $TMP_ADD
+  if [ -f ./amend_framework_id.sh ];then
+    bash ./amend_framework_id.sh $TMP_ADD $TARGET_DIR
+  fi
+  cd $TMP_ADD
+  for file in `find $1 -name *.part`
+  do
+    filepath=`dirname $file`
+    filename=`basename $file .part`
+    dstfile="$WORK_DIR/out/$filepath/$filename"
+    cat $file >> $dstfile
+  done
+  cd -
+}
 
+if [ $TARGET_DIR = "$BUILD_OUT/framework" ]
+then
+  appendSmaliPart "framework"
+fi
+
+if [ $TARGET_DIR = "$BUILD_OUT/services" ]
+then
+  appendSmaliPart "services"
+fi
+
+if [ $TARGET_DIR = "$BUILD_OUT/telephony-common" ]
+then
+  appendSmaliPart "telephony-common"
+fi
+
+if [ $TARGET_DIR = "$BUILD_OUT/wifi-service" ]
+then
+  appendSmaliPart "wifi-service"
+fi
 
 for class in `cat $OVERLAY_CLASSES | grep -Ev "^$|^#.*$"`
 do

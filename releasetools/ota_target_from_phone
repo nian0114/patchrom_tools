@@ -253,8 +253,6 @@ function remount_system_device {
 function build_SYSTEM {
     echo "Extract the whole /system from device"
     adb pull /system $SYSTEM_DIR
-    find $SYSTEM_DIR -name su | xargs rm -f
-    find $SYSTEM_DIR -name invoke-as | xargs rm -f
     remount_system_device
     build_filesystem_config
     recover_symlink
